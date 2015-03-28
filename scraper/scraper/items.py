@@ -10,6 +10,7 @@ class Advert(scrapy.Item):
     city = scrapy.Field()
     zipcode = scrapy.Field()
     address = scrapy.Field()
+    pictures = scrapy.Field()
 
     def to_json(self):
         return {
@@ -19,5 +20,6 @@ class Advert(scrapy.Item):
             "size": self.get("size"),
             "city": self.get("city"),
             "zipcode": self.get("zipcode"),
+            "pictures": self.get("pictures"),
             "address": self.get("address")
         }

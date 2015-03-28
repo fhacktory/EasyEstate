@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
+import re
 from scraper.items import Advert
 
 LABELS = {
@@ -9,6 +10,7 @@ LABELS = {
 }
 
 URL = "http://www.leboncoin.fr/locations/offres/ile_de_france/occasions/?o={}"
+PATTERN = re.compile("http://.*\.jpg")
 
 class LeboncoinSpider(scrapy.Spider):
     name = "leboncoin"
@@ -38,4 +40,12 @@ class LeboncoinSpider(scrapy.Spider):
         advert["title"] = response.xpath("//h2/text()").extract()[0]
         advert["link"] = response.url
         advert["price"] = response.xpath("//table/tr/td/span/text()").extract()[0]
+        advert["pictures"] = []
+
+        pictures = response.xpath("//div/a/span").css(".thumbs").extract()
+
+        for picture in pictures:
+            m = PATTERN.search(picture)
+            if m:
+                advert["pictures"].append(picture[m.start():m.end()])
         yield advert
