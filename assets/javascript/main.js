@@ -3,13 +3,13 @@
   var Advert, AdvertCollection, AdvertView, AppView, Location, LocationCollection, LocationView, Setting, SettingCollection, SettingView;
 
   $(function() {
-    var advert_collection, app, location_collection, map, setting_collection;
+    var advert_collection, app, location_collection, setting_collection;
     console.log("START EASYESTATE");
-    map = L.map('map').setView([45.7505, 4.8409], 13);
+    window.map = L.map('map').setView([45.7505, 4.8409], 13);
     L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18
-    }).addTo(map);
+    }).addTo(window.map);
     location_collection = new LocationCollection;
     setting_collection = new SettingCollection;
     advert_collection = new AdvertCollection;
@@ -52,7 +52,7 @@
         zipcode: 0,
         amenities: [],
         lat: 0,
-        long: 0,
+        lon: 0,
         bbox: []
       };
     },
@@ -150,14 +150,16 @@
       "click input[type=checkbox]": "doChecked"
     },
     doChecked: function(e) {
-      var loc, v, _i, _len;
-      console.log(window.location_collection);
+      var compute_midle_lat, compute_midle_lng, count, loc, v, _i, _len;
       for (_i = 0, _len = location_collection.length; _i < _len; _i++) {
         loc = location_collection[_i];
         v = loc.attributes.nodes[this.model.attributes.osm_key];
-        console.log(Object.keys(v).length);
+        count = Object.keys(v).length;
+        compute_midle_lat = loc.attributes.bbox.n - (loc.attributes.bbox.n - loc.attributes.bbox.s) / 2;
+        compute_midle_lng = loc.attributes.bbox.e - (loc.attributes.bbox.e - loc.attributes.bbox.w) / 2;
+        L.popup().setLatLng([compute_midle_lat, compute_midle_lng]).setContent(count + " " + this.model.attributes.name + " in " + loc.attributes.id).addTo(window.map);
       }
-      return console.log(this.model.attributes.name + " is set to " + e.currentTarget.checked);
+      return console.log + " is set to " + e.currentTarget.checked;
     },
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
