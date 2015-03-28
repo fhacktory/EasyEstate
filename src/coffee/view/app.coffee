@@ -8,7 +8,7 @@ AppView = Backbone.View.extend(
 
     @listenTo l, 'add', @addLoc
     @listenTo s, 'add', @addSet
-    @listenTo a, 'add', @addAd
+    #@listenTo a, 'add', @addAd
     return
 
   addLoc: (loc) ->
