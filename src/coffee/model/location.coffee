@@ -5,6 +5,7 @@ Location = Backbone.Model.extend(
     lat: 0
     lon: 0
     bbox: []
+    polygon: {}
 
   initialize: ->
     return
