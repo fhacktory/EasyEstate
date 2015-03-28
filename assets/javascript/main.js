@@ -6,7 +6,7 @@
     var app, map;
     console.log("START EASYESTATE");
     map = L.map('map').setView([45.7505, 4.8409], 13);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18
     }).addTo(map);
@@ -32,6 +32,24 @@
   AdvertCollection = Backbone.Firebase.Collection.extend({
     model: Advert,
     url: '//fiery-fire-2189.firebaseio.com/adverts'
+  });
+
+  Location = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        zipcode: 0,
+        amenities: [],
+        lat: 0,
+        long: 0,
+        bbox: []
+      };
+    },
+    initialize: function() {}
+  });
+
+  LocationCollection = Backbone.Firebase.Collection.extend({
+    model: Location,
+    url: '//fiery-fire-2189.firebaseio.com/amenities'
   });
 
   Setting = Backbone.Model.extend({
@@ -95,24 +113,6 @@
     }
   });
 
-  SettingView = Backbone.View.extend({
-    tagName: 'li',
-    template: _.template("<div class='checkbox'> <label> <input type='checkbox'> <%= name %> </label> </div>"),
-    events: {
-      "click input[type=checkbox]": "doChecked"
-    },
-    doChecked: function(e) {
-      return console.log(this.model.attributes.name + " is set to " + e.currentTarget.checked);
-    },
-    initialize: function() {
-      this.listenTo(this.model, 'change', this.render);
-    },
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
-    }
-  });
-
   LocationView = Backbone.View.extend({
     tagName: 'option',
     template: _.template("<%= id %>"),
@@ -131,22 +131,22 @@
     }
   });
 
-  Location = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        zipcode: 0,
-        amenities: [],
-        lat: 0,
-        long: 0,
-        bbox: []
-      };
+  SettingView = Backbone.View.extend({
+    tagName: 'li',
+    template: _.template("<div class='checkbox'> <label> <input type='checkbox'> <%= name %> </label> </div>"),
+    events: {
+      "click input[type=checkbox]": "doChecked"
     },
-    initialize: function() {}
-  });
-
-  LocationCollection = Backbone.Firebase.Collection.extend({
-    model: Location,
-    url: '//fiery-fire-2189.firebaseio.com/amenities'
+    doChecked: function(e) {
+      return console.log(this.model.attributes.name + " is set to " + e.currentTarget.checked);
+    },
+    initialize: function() {
+      this.listenTo(this.model, 'change', this.render);
+    },
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    }
   });
 
 }).call(this);
