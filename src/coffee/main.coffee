@@ -9,5 +9,4 @@ $ ->
     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     maxZoom: 18).addTo map
 
-  collection = new AdvertCollection
-  app = new AppView(collection: collection)
+  app = new AppView()

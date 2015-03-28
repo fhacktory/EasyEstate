@@ -1,13 +1,13 @@
 SettingView = Backbone.View.extend(
-  el: $('#app')
+  tagName: 'li'
+
+  template: _.template("<%= name %>")
 
   initialize: ->
-    @table = $("#adverts-table")
-    @listenTo @collection, 'add', @addOne
+    @listenTo @model, 'change', @render
     return
 
-  addOne: (ad) ->
-    view = new AdvertView(model: ad)
-    @table.append view.render().el
-    return
+  render: ->
+    @$el.html @template(@model.toJSON())
+    this
 )

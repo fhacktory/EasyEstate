@@ -1,12 +1,14 @@
-Settings = Backbone.Model.extend(
+Setting = Backbone.Model.extend(
   defaults: ->
-    size: 0
-    bar: false
-    restaurant: false
-    cafe: false
-    bicycle_rental: false
-    coworking_space: false
+    osm_key: ''
+    name: ''
+    enable: false
 
   initialize: ->
     return
+)
+
+SettingCollection = Backbone.Firebase.Collection.extend(
+  model: Setting
+  url: '//fiery-fire-2189.firebaseio.com/settings'
 )
