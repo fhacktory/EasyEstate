@@ -53,7 +53,7 @@
 
   AdvertView = Backbone.View.extend({
     tagName: 'tr',
-    template: _.template("<td><img class='img-responsive' src='<%= pictures[0] %>'/></td> <td><%= title %></td> <td><%= size %></td> <td><%= link %></td> <td><%= price %></td> <td><%= city %></td> <td><%= zipcode %></td>"),
+    template: _.template("<td><a href='<%= link %>'><img class='img-responsive' src='<%= pictures[0] %>'/></a></td> <td><%= title %></td> <td><%= size %></td> <td><%= price %></td> <td><%= city %></td> <td><%= zipcode %></td>"),
     initialize: function() {
       this.listenTo(this.model, 'change', this.render);
     },
@@ -90,18 +90,6 @@
         model: ad
       });
       this.table.append(view.render().el);
-    }
-  });
-
-  AdvertView = Backbone.View.extend({
-    tagName: 'tr',
-    template: _.template("<td><a href='<%= link %>'><img class='img-responsive' src='<%= pictures[0] %>' /></a></td> <td><%= title %></td> <td><%= size %></td> <td><%= price %></td> <td><%= city %></td> <td><%= zipcode %></td>"),
-    initialize: function() {
-      this.listenTo(this.model, 'change', this.render);
-    },
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
     }
   });
 
