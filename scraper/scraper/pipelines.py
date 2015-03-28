@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-
-# Define your item pipelines here
-#
-# Don't forget to add your pipeline to the ITEM_PIPELINES setting
-# See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
-
+import firebase
 
 class ScraperPipeline(object):
+    def __init__(self):
+        self.firebase = firebase.FirebaseApplication('https://fiery-fire-2189.firebaseio.com', None)
+
     def process_item(self, item, spider):
+        self.firebase.post_async('/adverts', item.to_json(), {'print': 'silent'})
         return item
