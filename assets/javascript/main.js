@@ -3,7 +3,7 @@
   var Advert, AdvertCollection, AdvertView, AppView, Location, LocationCollection, LocationView, Setting, SettingCollection, SettingView;
 
   $(function() {
-    var advert_collection, app, location_collection, setting_collection;
+    var app, location_collection, setting_collection;
     console.log("START EASYESTATE");
     window.map = L.map('map').setView([45.7505, 4.8409], 13);
     L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -12,17 +12,13 @@
     }).addTo(window.map);
     location_collection = new LocationCollection;
     setting_collection = new SettingCollection;
-    advert_collection = new AdvertCollection;
     location_collection.on('sync', function(collection) {
       return window.location_collection = collection.models;
     });
     setting_collection.on('sync', function(collection) {
       return window.setting_collection = collection.models;
     });
-    advert_collection.on('sync', function(collection) {
-      return window.advert_collection = collection.models;
-    });
-    return app = new AppView(location_collection, setting_collection, advert_collection);
+    return app = new AppView(location_collection, setting_collection, 'advert_collection');
   });
 
   Advert = Backbone.Model.extend({
@@ -53,7 +49,8 @@
         amenities: [],
         lat: 0,
         lon: 0,
-        bbox: []
+        bbox: [],
+        polygon: {}
       };
     },
     initialize: function() {}
@@ -100,7 +97,6 @@
       this.location_el = $("#location");
       this.listenTo(l, 'add', this.addLoc);
       this.listenTo(s, 'add', this.addSet);
-      this.listenTo(a, 'add', this.addAd);
     },
     addLoc: function(loc) {
       var view;
@@ -150,14 +146,46 @@
       "click input[type=checkbox]": "doChecked"
     },
     doChecked: function(e) {
-      var compute_midle_lat, compute_midle_lng, count, loc, v, _i, _len;
-      for (_i = 0, _len = location_collection.length; _i < _len; _i++) {
-        loc = location_collection[_i];
-        v = loc.attributes.nodes[this.model.attributes.osm_key];
-        count = Object.keys(v).length;
-        compute_midle_lat = loc.attributes.bbox.n - (loc.attributes.bbox.n - loc.attributes.bbox.s) / 2;
-        compute_midle_lng = loc.attributes.bbox.e - (loc.attributes.bbox.e - loc.attributes.bbox.w) / 2;
-        L.popup().setLatLng([compute_midle_lat, compute_midle_lng]).setContent(count + " " + this.model.attributes.name + " in " + loc.attributes.id).addTo(window.map);
+      var compute_midle_lat, compute_midle_lng, i, intensity, loc, ss, stats, stats_sorted, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
+      stats = {};
+      console.log(window.location_collection);
+      if (e.currentTarget.checked) {
+        for (_i = 0, _len = location_collection.length; _i < _len; _i++) {
+          loc = location_collection[_i];
+          v = loc.attributes.nodes[this.model.attributes.osm_key];
+          if (v) {
+            stats[loc.attributes.id] = Object.keys(v).length;
+          }
+        }
+        stats_sorted = Object.keys(stats).sort(function(a, b) {
+          return stats[b] - stats[a];
+        });
+        for (_j = 0, _len1 = location_collection.length; _j < _len1; _j++) {
+          loc = location_collection[_j];
+          for (i = _k = 0, _len2 = stats_sorted.length; _k < _len2; i = ++_k) {
+            ss = stats_sorted[i];
+            if (ss === loc.attributes.id) {
+              intensity = Math.round(((i + 1) * 255) / (location_collection.length + 1));
+              console.log(intensity);
+            }
+          }
+          L.geoJson(loc.attributes.polygon, {
+            color: "rgb(75, " + intensity + ", 0)",
+            weight: 5,
+            fillOpacity: 0.90,
+            opacity: 0.90
+          }).addTo(window.map);
+          compute_midle_lat = loc.attributes.bbox.n - (loc.attributes.bbox.n - loc.attributes.bbox.s) / 2;
+          compute_midle_lng = loc.attributes.bbox.e - (loc.attributes.bbox.e - loc.attributes.bbox.w) / 2;
+        }
+      } else {
+        console.log("Removing layers");
+        _ref = window.map._layers;
+        for (_l = 0, _len3 = _ref.length; _l < _len3; _l++) {
+          i = _ref[_l];
+          console.log(i);
+          window.map.removeLayer(i);
+        }
       }
       return console.log + " is set to " + e.currentTarget.checked;
     },

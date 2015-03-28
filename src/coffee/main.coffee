@@ -19,7 +19,7 @@ $ ->
   setting_collection.on 'sync', (collection) ->
     window.setting_collection = collection.models
 
-  advert_collection.on 'sync', (collection) ->
-    window.advert_collection = collection.models
+  # advert_collection.on 'sync', (collection) ->
+  #   window.advert_collection = collection.models
 
-  app = new AppView(location_collection, setting_collection, advert_collection)
+  app = new AppView(location_collection, setting_collection, 'advert_collection')
