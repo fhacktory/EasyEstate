@@ -13,11 +13,6 @@ SettingView = Backbone.View.extend(
 
   doChecked: (e) ->
     stats = {}
-    heat_map =
-      hot:
-        color: "#ff7800"
-        weight: 5
-        opacity: 0.65
 
     console.log window.location_collection
 
@@ -27,13 +22,23 @@ SettingView = Backbone.View.extend(
         if v
           stats[loc.attributes.id] = Object.keys(v).length
 
-      stats = Object.keys(stats).sort(
+      stats_sorted = Object.keys(stats).sort(
         (a,b) ->
           return stats[b] - stats[a]
       )
 
       for loc in location_collection
-        L.geoJson(loc.attributes.polygon, heat_map.hot).addTo(window.map);
+        for ss, i in stats_sorted
+          if ss == loc.attributes.id
+            intensity = Math.round(((i+1)*255)/(location_collection.length+1))
+            console.log intensity
+
+        L.geoJson(loc.attributes.polygon,
+          color: "rgb(75, "+intensity+", 0)"
+          weight: 5
+          fillOpacity: 0.90
+          opacity: 0.90
+        ).addTo(window.map);
 
         compute_midle_lat = loc.attributes.bbox.n - (loc.attributes.bbox.n - loc.attributes.bbox.s)/2
         compute_midle_lng = loc.attributes.bbox.e - (loc.attributes.bbox.e - loc.attributes.bbox.w)/2
