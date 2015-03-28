@@ -10,8 +10,8 @@ $ ->
     maxZoom: 18).addTo window.map
 
   location_collection = new LocationCollection
-  setting_collection = new  SettingCollection
-  advert_collection = new  AdvertCollection
+  setting_collection = new SettingCollection
+  advert_collection = new AdvertCollection
 
   location_collection.on 'sync', (collection) ->
     window.location_collection = collection.models
