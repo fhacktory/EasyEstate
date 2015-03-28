@@ -146,15 +146,8 @@
       "click input[type=checkbox]": "doChecked"
     },
     doChecked: function(e) {
-      var compute_midle_lat, compute_midle_lng, heat_map, i, loc, stats, v, _i, _j, _k, _len, _len1, _len2, _ref;
+      var compute_midle_lat, compute_midle_lng, i, intensity, loc, ss, stats, stats_sorted, v, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref;
       stats = {};
-      heat_map = {
-        hot: {
-          color: "#ff7800",
-          weight: 5,
-          opacity: 0.65
-        }
-      };
       console.log(window.location_collection);
       if (e.currentTarget.checked) {
         for (_i = 0, _len = location_collection.length; _i < _len; _i++) {
@@ -164,20 +157,32 @@
             stats[loc.attributes.id] = Object.keys(v).length;
           }
         }
-        stats = Object.keys(stats).sort(function(a, b) {
+        stats_sorted = Object.keys(stats).sort(function(a, b) {
           return stats[b] - stats[a];
         });
         for (_j = 0, _len1 = location_collection.length; _j < _len1; _j++) {
           loc = location_collection[_j];
-          L.geoJson(loc.attributes.polygon, heat_map.hot).addTo(window.map);
+          for (i = _k = 0, _len2 = stats_sorted.length; _k < _len2; i = ++_k) {
+            ss = stats_sorted[i];
+            if (ss === loc.attributes.id) {
+              intensity = Math.round(((i + 1) * 255) / (location_collection.length + 1));
+              console.log(intensity);
+            }
+          }
+          L.geoJson(loc.attributes.polygon, {
+            color: "rgb(75, " + intensity + ", 0)",
+            weight: 5,
+            fillOpacity: 0.90,
+            opacity: 0.90
+          }).addTo(window.map);
           compute_midle_lat = loc.attributes.bbox.n - (loc.attributes.bbox.n - loc.attributes.bbox.s) / 2;
           compute_midle_lng = loc.attributes.bbox.e - (loc.attributes.bbox.e - loc.attributes.bbox.w) / 2;
         }
       } else {
         console.log("Removing layers");
         _ref = window.map._layers;
-        for (_k = 0, _len2 = _ref.length; _k < _len2; _k++) {
-          i = _ref[_k];
+        for (_l = 0, _len3 = _ref.length; _l < _len3; _l++) {
+          i = _ref[_l];
           console.log(i);
           window.map.removeLayer(i);
         }
