@@ -3,14 +3,26 @@
   var Advert, AdvertCollection, AdvertView, AppView, Location, LocationCollection, LocationView, Setting, SettingCollection, SettingView;
 
   $(function() {
-    var app, map;
+    var advert_collection, app, location_collection, map, setting_collection;
     console.log("START EASYESTATE");
     map = L.map('map').setView([45.7505, 4.8409], 13);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18
     }).addTo(map);
-    return app = new AppView();
+    location_collection = new LocationCollection;
+    setting_collection = new SettingCollection;
+    advert_collection = new AdvertCollection;
+    location_collection.on('sync', function(collection) {
+      return window.location_collection = collection.models;
+    });
+    setting_collection.on('sync', function(collection) {
+      return window.setting_collection = collection.models;
+    });
+    advert_collection.on('sync', function(collection) {
+      return window.advert_collection = collection.models;
+    });
+    return app = new AppView(location_collection, setting_collection, advert_collection);
   });
 
   Advert = Backbone.Model.extend({
@@ -32,6 +44,24 @@
   AdvertCollection = Backbone.Firebase.Collection.extend({
     model: Advert,
     url: '//fiery-fire-2189.firebaseio.com/adverts'
+  });
+
+  Location = Backbone.Model.extend({
+    defaults: function() {
+      return {
+        zipcode: 0,
+        amenities: [],
+        lat: 0,
+        long: 0,
+        bbox: []
+      };
+    },
+    initialize: function() {}
+  });
+
+  LocationCollection = Backbone.Firebase.Collection.extend({
+    model: Location,
+    url: '//fiery-fire-2189.firebaseio.com/amenities'
   });
 
   Setting = Backbone.Model.extend({
@@ -64,13 +94,13 @@
 
   AppView = Backbone.View.extend({
     el: $('#app'),
-    initialize: function() {
+    initialize: function(l, s, a) {
       this.advert_el = $("#adverts-table");
       this.setting_el = $("#settings-list");
       this.location_el = $("#location");
-      this.listenTo(new LocationCollection, 'add', this.addLoc);
-      this.listenTo(new SettingCollection, 'add', this.addSet);
-      this.listenTo(new AdvertCollection, 'add', this.addAd);
+      this.listenTo(l, 'add', this.addLoc);
+      this.listenTo(s, 'add', this.addSet);
+      this.listenTo(a, 'add', this.addAd);
     },
     addLoc: function(loc) {
       var view;
@@ -95,24 +125,6 @@
     }
   });
 
-  SettingView = Backbone.View.extend({
-    tagName: 'li',
-    template: _.template("<div class='checkbox'> <label> <input type='checkbox'> <%= name %> </label> </div>"),
-    events: {
-      "click input[type=checkbox]": "doChecked"
-    },
-    doChecked: function(e) {
-      return console.log(this.model.attributes.name + " is set to " + e.currentTarget.checked);
-    },
-    initialize: function() {
-      this.listenTo(this.model, 'change', this.render);
-    },
-    render: function() {
-      this.$el.html(this.template(this.model.toJSON()));
-      return this;
-    }
-  });
-
   LocationView = Backbone.View.extend({
     tagName: 'option',
     template: _.template("<%= id %>"),
@@ -120,7 +132,7 @@
       this.listenTo(this.model, 'change', this.render);
     },
     events: {
-      "click #location": "doSelect"
+      "change #location": "doSelect"
     },
     doSelect: function(e) {
       return console.log(e);
@@ -131,22 +143,29 @@
     }
   });
 
-  Location = Backbone.Model.extend({
-    defaults: function() {
-      return {
-        zipcode: 0,
-        amenities: [],
-        lat: 0,
-        long: 0,
-        bbox: []
-      };
+  SettingView = Backbone.View.extend({
+    tagName: 'li',
+    template: _.template("<div class='checkbox'> <label> <input type='checkbox'> <%= name %> </label> </div>"),
+    events: {
+      "click input[type=checkbox]": "doChecked"
     },
-    initialize: function() {}
-  });
-
-  LocationCollection = Backbone.Firebase.Collection.extend({
-    model: Location,
-    url: '//fiery-fire-2189.firebaseio.com/amenities'
+    doChecked: function(e) {
+      var loc, v, _i, _len;
+      console.log(window.location_collection);
+      for (_i = 0, _len = location_collection.length; _i < _len; _i++) {
+        loc = location_collection[_i];
+        v = loc.attributes.nodes[this.model.attributes.osm_key];
+        console.log(Object.keys(v).length);
+      }
+      return console.log(this.model.attributes.name + " is set to " + e.currentTarget.checked);
+    },
+    initialize: function() {
+      this.listenTo(this.model, 'change', this.render);
+    },
+    render: function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    }
   });
 
 }).call(this);

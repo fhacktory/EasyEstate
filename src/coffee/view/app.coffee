@@ -1,14 +1,14 @@
 AppView = Backbone.View.extend(
   el: $('#app')
 
-  initialize: ->
+  initialize: (l, s ,a) ->
     @advert_el = $("#adverts-table")
     @setting_el = $("#settings-list")
     @location_el = $("#location")
 
-    @listenTo new LocationCollection, 'add', @addLoc
-    @listenTo new SettingCollection, 'add', @addSet
-    @listenTo new AdvertCollection, 'add', @addAd
+    @listenTo l, 'add', @addLoc
+    @listenTo s, 'add', @addSet
+    @listenTo a, 'add', @addAd
     return
 
   addLoc: (loc) ->
