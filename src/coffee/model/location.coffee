@@ -3,7 +3,7 @@ Location = Backbone.Model.extend(
     zipcode: 0
     amenities: []
     lat: 0
-    long: 0
+    lon: 0
     bbox: []
 
   initialize: ->
