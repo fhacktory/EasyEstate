@@ -8,7 +8,7 @@ LocationView = Backbone.View.extend(
     return
 
   events:
-    "click #location": "doSelect"
+    "change #location": "doSelect"
 
   doSelect: (e) ->
     console.log e
