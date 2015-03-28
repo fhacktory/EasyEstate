@@ -4,7 +4,7 @@ AdvertView = Backbone.View.extend(
           <td><img class='img-responsive' src='<%= pictures[0] %>'/></td>
           <td><%= title %></td>
           <td><%= size %></td>
-          <td><%= link %></td>
+          <td><a href='<%= link %>'>Link</a></td>
           <td><%= price %></td>
           <td><%= city %></td>
           <td><%= zipcode %></td>")
