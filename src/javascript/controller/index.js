@@ -25,15 +25,17 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
 
   $scope.addLayer = function(setting) {
     var amenities_number = $scope.amenities_number[setting.osm_key];
+    console.log(amenities_number);
     for (var key in $scope.amenities) {
       var amenity = $scope.amenities[key];
+      var toDisplay = ((amenities_number === undefined) || amenities_number[key] === undefined) ? "0" : amenities_number[key];
       layer = L.geoJson(amenity.polygon, {
-        color: "rgb(75, "+ amenities_number[key]  +", 0)",
+        color: "rgb(75, "+ toDisplay +", 0)",
         weight: 5,
         fillOpacity: 0.90,
         opacity: 0.90,
       })
-      layer.bindPopup(amenities_number[key] + " " + setting.name +  " in  " + key);
+      layer.bindPopup(toDisplay + " " + setting.name +  " in  " + key);
       layers.addLayer(layer);
     }
   };
