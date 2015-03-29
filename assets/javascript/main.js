@@ -16,7 +16,6 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   $scope.settings = $firebaseArray(settings);
 
   $scope.limited_adverts = $firebaseArray(adverts.limitToLast(25));
-  console.log($scope.limited_adverts)
 
   $scope.layers = {};
   $scope.map = undefined;

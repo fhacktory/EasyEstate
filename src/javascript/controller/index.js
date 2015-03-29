@@ -20,7 +20,6 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   };
 
   $scope.sizeToInt = function(size) {
-    console.log(size);
     return parseInt(size.replace(/\s+/g, '').split('m')[0]);
   };
 
@@ -78,7 +77,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   };
 
   (function() {
-    $scope.map = L.map('map').setView([45.7505, 4.8409], 13)
+    $scope.map = L.map('map').setView([45.7505, 4.8409], 12)
 
     L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors',

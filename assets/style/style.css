@@ -5,4 +5,11 @@ body {
 #map {
   height: 800px; }
 
+.flat {
+  margin: none; }
+
+.navbar {
+  border-radius: 0;
+  margin-bottom: 0; }
+
 /*# sourceMappingURL=style.css.map */
