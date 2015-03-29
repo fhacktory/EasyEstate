@@ -58,13 +58,16 @@
           </div>
         </div>
         <div class="row">
-          <div class="table-responsive col-md-12">
-            <table class="table table-striped">
-              <tr ng-repeat="advert in adverts">
-                <td>{{ advert.title }}</td>
-                <td>{{ advert.size }}</td>
-              </tr>
-            </table>
+          <div id="app" class="table-responsive col-md-12">
+            <table id="adverts-table" class="table table-striped">
+            <tr ng-repeat="advert in limited_adverts">
+              <td><a ng-href="{{ advert.link }}"><img class='img-responsive' ng-src="{{ advert.pictures[0] }}"/></a></td>
+              <td>{{ advert.title }}</td>
+              <td>{{ advert.size }}</td>
+              <td>{{ advert.price }}</td>
+              <td>{{ advert.city }}</td>
+              <td>{{ advert.zipcode }}</td>
+            </tr>
           </div>
         </div>
       </div>
