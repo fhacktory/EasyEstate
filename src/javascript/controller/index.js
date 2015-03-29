@@ -40,11 +40,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
       if (min === undefined) { min = 0; }
       if (max === undefined) { max = 0; }
       if (current === undefined) { current = 0; }
-      if (invert) {
-        return 255 - parseInt((current - min) * 255 / (max - min));
-      } else {
-        return parseInt((current - min) * 255 / (max - min));
-      }
+      return parseInt((current - min) * 255 / (max - min));
     };
 
     for (var key in $scope.amenities) {
@@ -68,12 +64,15 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
     var amenities_number = {};
     if (osm_key == "price") {
       amenities_number = $scope.prices;
+      $scope.best_districts = Object.keys(amenities_number).sort(function(a, b) {
+        return amenities_number[a] - amenities_number[b];
+      });
     } else {
       amenities_number = $scope.amenities_number[osm_key];
+      $scope.best_districts = Object.keys(amenities_number).sort(function(a, b) {
+        return amenities_number[b] - amenities_number[a];
+      });
     }
-    $scope.best_districts = Object.keys(amenities_number).sort(function(a, b) {
-      return amenities_number[b] - amenities_number[a];
-    });
   };
 
   amenities.on("value", function(snapshot) {
