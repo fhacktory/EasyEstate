@@ -32,26 +32,34 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
       amenities_number = $scope.amenities_number[setting.osm_key];
     }
 
-    var make_color = function(current) {
+    var make_color = function(current, invert) {
+      if (invert === undefined) invert = false;
       var max = amenities_number[$scope.best_districts[0]];
       var min = amenities_number[$scope.best_districts[$scope.best_districts.length - 1]];
 
       if (min === undefined) { min = 0; }
       if (max === undefined) { max = 0; }
       if (current === undefined) { current = 0; }
-      console.log(current , max, min, current * 255 / (max - min));
-      return parseInt((current - min) * 255 / (max - min));
+      if (invert) {
+        return 255 - parseInt((current - min) * 255 / (max - min));
+      } else {
+        return parseInt((current - min) * 255 / (max - min));
+      }
     };
 
     for (var key in $scope.amenities) {
       var amenity = $scope.amenities[key];
+      var toDisplay = ((amenities_number === undefined) || amenities_number[key] === undefined) ? "0" : amenities_number[key];
+      if (typeof toDisplay == "number" && toDisplay % 1 !== 0) {
+        toDisplay = toDisplay.toFixed(2);
+      }
       var layer = L.geoJson(amenity.polygon, {
-        color: "rgb(75, "+ make_color(amenities_number[key]) +", 0)",
+        color: "rgb(75, "+ make_color(toDisplay, setting.osm_key === 'price') +", 0)",
         weight: 5,
-        fillOpacity: 0.90,
-        opacity: 0.90,
+        fillOpacity: 0.80,
+        opacity: 0.80,
       });
-      layer.bindPopup(amenities_number[key] + " " + setting.name +  " in  " + key);
+      layer.bindPopup(toDisplay + " " + setting.name +  " in  " + key);
       layers.addLayer(layer);
     }
   };

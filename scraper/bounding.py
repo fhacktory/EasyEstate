@@ -24,11 +24,18 @@ BOX = {
 }
 URL = "http://overpass-api.de/api/interpreter"
 AMENITIES = [
-    "bar",
-    "restaurant",
-    "cafe",
-    "bicycle_rental",
-    "coworking_space"
+    "fast_food",
+    "charging_station",
+    "pharmacy",
+    "brothel",
+    "cinema",
+    "nightclub",
+    "stripclub",
+    "theatre",
+    "dojo",
+    "gym",
+    "marketplace",
+    "sauna"
 ]
 
 def fetch_amenities(zipcode, amenities):

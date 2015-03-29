@@ -40,7 +40,7 @@
                   <p ng-click="updateSetting(setting)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
                 </div>
                 <div>
-                  <p ng-click="updateSetting('price')" ng-class="checked.price ? 'btn-default' : ''" class="btn">Price</p>
+                  <p ng-click="updateSetting({osm_key:'price', name: 'Price'})" ng-class="checked.price ? 'btn-default' : ''" class="btn">Price</p>
                 </div>
               </div>
             </div>
