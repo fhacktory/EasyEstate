@@ -28,14 +28,23 @@
       </div>
     </div>
   </nav>
-  <div>
+
+  <div class="container-fluid">
     <div class="row">
       <div class="col-md-2">
         <div class="row">
-          <div class="col-md-12 col-md-offset-1">
+
+          <div class="col-md-12">
             <div id="settings">
               <div ng-repeat="setting in settings">
                 <p ng-click="updateSetting(setting.osm_key)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div id="best_districts">
+              <div ng-repeat="best_district in best_districts">
+                <p> {{ best_district }}</p>
               </div>
             </div>
           </div>
