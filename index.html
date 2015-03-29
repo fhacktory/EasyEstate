@@ -42,7 +42,7 @@
                 <li ng-repeat="setting in settings">
                   <div class="checkbox">
                     <label>
-                      <input type="checkbox" ng-model="checkbox[setting.osm_key]" ng-change="updateSetting(osm_key)"> {{ setting.name }}
+                      <input type="checkbox" ng-model="checkbox[setting.osm_key]" ng-change="updateSetting(setting.osm_key)"> {{ setting.name }}
                     </label>
                   </div>
                 </li>

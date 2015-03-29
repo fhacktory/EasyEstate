@@ -2,6 +2,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   var settings = new Firebase("//fiery-fire-2189.firebaseio.com/settings");
   var adverts = new Firebase("//fiery-fire-2189.firebaseio.com/adverts");
   var amenities = new Firebase("//fiery-fire-2189.firebaseio.com/amenities");
+  var layers = L.layerGroup();
 
   adverts.on("value", function(snapshot) {
     $timeout(function() {
@@ -10,6 +11,19 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   });
 
   $scope.amenities_number = {};
+
+  $scope.addLayer = function(osm_key) {
+    var amenities_number = $scope.amenities_number[osm_key];
+    for (var key in $scope.amenities) {
+      var amenity = $scope.amenities[key];
+      layers.addLayer(L.geoJson(amenity.polygon, {
+        color: "rgb(75, "+ amenities_number[key]  +", 0)",
+        weight: 5,
+        fillOpacity: 0.90,
+        opacity: 0.90,
+      }));
+    }
+  };
 
   amenities.on("value", function(snapshot) {
     $timeout(function() {
@@ -22,26 +36,18 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
           }
           $scope.amenities_number[node][key] = Object.keys(amenity.nodes[node]).length;
         }
-        L.geoJson(amenity.polygon, {
-          color: "rgb(75, 125, 0)",
-          weight: 5,
-          fillOpacity: 0.90,
-          opacity: 0.90,
-        }).addTo($scope.map);
       }
     });
   });
 
-  $scope.layers = {};
+  $scope.checkbox = {};
   $scope.map = undefined;
 
   $scope.updateSetting = function(osm_key) {
-    if ($scope.layers[osm_key] === null) {
-      // Add the layer on the map
-      $scope.layers[osm_key] = "map";
+    if ($scope.checkbox[osm_key]) {
+      $scope.addLayer(osm_key);
     } else {
-      // Remove the layer from the map
-      $scope.layers[osm_key] = null;
+      layers.clearLayers();
     }
   };
 
@@ -52,7 +58,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
       attribution: '&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors',
       maxZoom: 18
     }).addTo($scope.map);
-
+    layers.addTo($scope.map);
     $scope.settings = $firebaseObject(settings);
   })();
 });
