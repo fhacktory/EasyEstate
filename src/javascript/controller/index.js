@@ -5,6 +5,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   var layers = L.layerGroup();
 
   $scope.checked = {};
+  $scope.best_districts = [];
 
   adverts.on("value", function(snapshot) {
     $timeout(function() {
@@ -25,6 +26,13 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
         opacity: 0.90,
       }));
     }
+  };
+
+  $scope.setBestDistrict = function(osm_key) {
+    var amenities_number = $scope.amenities_number[osm_key];
+    $scope.best_districts = Object.keys(amenities_number).sort(function(a, b) {
+      return amenities_number[b] - amenities_number[a];
+    });
   };
 
   amenities.on("value", function(snapshot) {
@@ -52,9 +60,11 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
     } else {
       $scope.checked[osm_key] = false;
     }
+    $scope.best_districts = [];
     layers.clearLayers();
     if ($scope.checked[osm_key]) {
       $scope.addLayer(osm_key);
+      $scope.setBestDistrict(osm_key);
     }
   };
 
