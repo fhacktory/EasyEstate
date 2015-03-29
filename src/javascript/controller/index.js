@@ -23,16 +23,18 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
     return parseInt(size.replace(/\s+/g, '').split('m')[0]);
   };
 
-  $scope.addLayer = function(osm_key) {
-    var amenities_number = $scope.amenities_number[osm_key];
+  $scope.addLayer = function(setting) {
+    var amenities_number = $scope.amenities_number[setting.osm_key];
     for (var key in $scope.amenities) {
       var amenity = $scope.amenities[key];
-      layers.addLayer(L.geoJson(amenity.polygon, {
+      layer = L.geoJson(amenity.polygon, {
         color: "rgb(75, "+ amenities_number[key]  +", 0)",
         weight: 5,
         fillOpacity: 0.90,
         opacity: 0.90,
-      }));
+      })
+      layer.bindPopup(amenities_number[key] + " " + setting.name +  " in  " + key);
+      layers.addLayer(layer);
     }
   };
 
@@ -61,18 +63,18 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   $scope.checkbox = {};
   $scope.map = undefined;
 
-  $scope.updateSetting = function(osm_key) {
-    if (!$scope.checked[osm_key]) {
+  $scope.updateSetting = function(setting) {
+    if (!$scope.checked[setting.osm_key]) {
       $scope.checked = {};
-      $scope.checked[osm_key] = true;
+      $scope.checked[setting.osm_key] = true;
     } else {
-      $scope.checked[osm_key] = false;
+      $scope.checked[setting.osm_key] = false;
     }
     $scope.best_districts = [];
     layers.clearLayers();
-    if ($scope.checked[osm_key]) {
-      $scope.addLayer(osm_key);
-      $scope.setBestDistrict(osm_key);
+    if ($scope.checked[setting.osm_key]) {
+      $scope.addLayer(setting);
+      $scope.setBestDistrict(setting.osm_key);
     }
   };
 
