@@ -9,12 +9,20 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
     });
   });
 
+  $scope.amenities_number = {};
+
   amenities.on("value", function(snapshot) {
     $timeout(function() {
       $scope.amenities = snapshot.val();
-      console.log(snapshot.val());
       for (var key in snapshot.val()) {
-        L.geoJson(snapshot.val()[key].polygon, {
+        var amenity = snapshot.val()[key];
+        for (var node in amenity.nodes) {
+          if (!$scope.amenities_number[node]) {
+            $scope.amenities_number[node] = {};
+          }
+          $scope.amenities_number[node][key] = Object.keys(amenity.nodes[node]).length;
+        }
+        L.geoJson(amenity.polygon, {
           color: "rgb(75, 125, 0)",
           weight: 5,
           fillOpacity: 0.90,
