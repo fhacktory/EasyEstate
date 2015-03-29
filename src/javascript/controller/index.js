@@ -1,13 +1,3 @@
-var app = angular.module("app", ["ngRoute", "firebase"]);
-
-app.config(function($routeProvider) {
-  $routeProvider
-  .when("/", {
-    templateUrl: "index.html",
-    controller: "IndexCtrl"
-  })
-  .otherwise({redirectTo: '/'});
-});
 app.controller("IndexCtrl", function($scope, $firebaseObject) {
   var settings = new Firebase("https://fiery-fire-2189.firebaseio.com/settings");
   /* var adverts = new Firebase("https://fiery-fire-2189.firebaseio.com/adverts");
