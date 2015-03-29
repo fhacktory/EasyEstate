@@ -9,9 +9,14 @@ app.config(function($routeProvider) {
   .otherwise({redirectTo: '/'});
 });
 app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $timeout) {
-  var settings = new Firebase("https://fiery-fire-2189.firebaseio.com/settings");
-  /* var adverts = new Firebase("https://fiery-fire-2189.firebaseio.com/adverts"); */
-  var amenities = new Firebase("https://fiery-fire-2189.firebaseio.com/amenities");
+  var settings = new Firebase("//fiery-fire-2189.firebaseio.com/settings");
+  var adverts = new Firebase("//fiery-fire-2189.firebaseio.com/adverts");
+  var amenities = new Firebase("//fiery-fire-2189.firebaseio.com/amenities");
+
+  $scope.settings = $firebaseArray(settings);
+
+  $scope.limited_adverts = $firebaseArray(adverts.limitToLast(25));
+  console.log($scope.limited_adverts)
 
   $scope.layers = {};
   $scope.map = undefined;
@@ -49,7 +54,5 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
         }
       });
     });
-
-
   })();
 });

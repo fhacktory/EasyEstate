@@ -58,13 +58,13 @@
           </div>
         </div>
         <div class="row">
-          <div id="app" class="table-responsive col-md-12">
-            <table id="adverts-table" class="table table-striped"></table>
-            {{ limited_adverts.length }}
-            <tr ng-repeat="advert in limited_adverts">
-              <td>{{ advert.title }}</td>
-              <td>{{ advert.size }}</td>
-            </tr>
+          <div class="table-responsive col-md-12">
+            <table class="table table-striped">
+              <tr ng-repeat="advert in adverts">
+                <td>{{ advert.title }}</td>
+                <td>{{ advert.size }}</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
