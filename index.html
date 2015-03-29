@@ -43,6 +43,19 @@
             </div>
             <hr class="col-md-12">
             <div class="col-md-6 col-md-offset-3">
+              <div id="filters">
+                <form class="form">
+                  <div class="form-group">
+                    <input type="number" class="form-control" name="price" ng-model="form.price" placeholder="Price max">
+                  </div>
+                  <div class="form-group">
+                    <input type="number" class="form-control" name="size" ng-model="form.size" placeholder="Size min">
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
               <div id="best_districts">
                 <div ng-repeat="best_district in best_districts">
                   <p> {{ best_district }}</p>
@@ -60,7 +73,7 @@
           <div class="row">
             <div id="app" class="table-responsive col-md-12">
               <table id="adverts-table" class="table table-striped">
-                <tr ng-repeat="advert in adverts" ng-hide="best_districts && advert.zipcode != best_districts[0]">
+                <tr ng-repeat="advert in adverts" ng-hide="(best_districts && advert.zipcode != best_districts[0]) || !advert.pictures || priceToInt(advert.price) > form.price || !advert.size || sizeToInt(advert.size) < form.size">
                   <td><a ng-href="{{ advert.link }}"><img class='img-responsive' ng-src="{{ advert.pictures[0] }}"/></a></td>
                   <td>{{ advert.title }}</td>
                   <td>{{ advert.size }}</td>

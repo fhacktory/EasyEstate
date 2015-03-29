@@ -15,6 +15,15 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
 
   $scope.amenities_number = {};
 
+  $scope.priceToInt = function(price) {
+    return parseInt(price.replace(/\s+/g, '').split('€')[0]);
+  };
+
+  $scope.sizeToInt = function(size) {
+    console.log(size);
+    return parseInt(size.replace(/\s+/g, '').split('m')[0]);
+  };
+
   $scope.addLayer = function(osm_key) {
     var amenities_number = $scope.amenities_number[osm_key];
     for (var key in $scope.amenities) {
