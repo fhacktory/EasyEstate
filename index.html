@@ -33,20 +33,10 @@
       <div class="col-md-2">
         <div class="row">
           <div class="col-md-12 col-md-offset-1">
-            <div class="hidden" id="location_select_container">
-              <select id="location" name="loc">
-              </select>
-            </div>
             <div id="settings">
-              <ul id="settings-list" class="nav nav-sidebar">
-                <li ng-repeat="setting in settings">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox" ng-model="checkbox[setting.osm_key]" ng-change="updateSetting(setting.osm_key)"> {{ setting.name }}
-                    </label>
-                  </div>
-                </li>
-              </ul>
+              <div ng-repeat="setting in settings">
+                <p ng-click="updateSetting(setting.osm_key)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
+              </div>
             </div>
           </div>
         </div>

@@ -4,6 +4,8 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   var amenities = new Firebase("//fiery-fire-2189.firebaseio.com/amenities");
   var layers = L.layerGroup();
 
+  $scope.checked = {};
+
   adverts.on("value", function(snapshot) {
     $timeout(function() {
       $scope.adverts = snapshot.val();
@@ -44,10 +46,15 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   $scope.map = undefined;
 
   $scope.updateSetting = function(osm_key) {
-    if ($scope.checkbox[osm_key]) {
-      $scope.addLayer(osm_key);
+    if (!$scope.checked[osm_key]) {
+      $scope.checked = {};
+      $scope.checked[osm_key] = true;
     } else {
-      layers.clearLayers();
+      $scope.checked[osm_key] = false;
+    }
+    layers.clearLayers();
+    if ($scope.checked[osm_key]) {
+      $scope.addLayer(osm_key);
     }
   };
 
