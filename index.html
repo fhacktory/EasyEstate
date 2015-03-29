@@ -11,7 +11,7 @@
   </head>
   <body ng-controller="IndexCtrl">
     <nav class="navbar navbar-inverse">
-      <div class="container-fluid">
+      <div class="container-fluid not-so-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
             <span class="sr-only">Toggle navigation</span>
@@ -29,15 +29,15 @@
       </div>
     </nav>
 
-    <div class="container-fluid">
-      <div class="row">
+    <div class="container-fluid not-so-fluid ">
+      <div class="row flat">
         <div class="col-md-2">
           <div class="row">
 
             <div class="col-md-6 col-md-offset-3">
               <div id="settings">
                 <div ng-repeat="setting in settings">
-                  <p ng-click="updateSetting(setting.osm_key)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
+                  <p ng-click="updateSetting(setting)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
                 </div>
                 <div>
                   <p ng-click="updateSetting('price')" ng-class="checked.price ? 'btn-default' : ''" class="btn">Price</p>
@@ -68,7 +68,7 @@
           </div>
         </div>
         <div class="col-md-10">
-          <div class="row">
+          <div class="row flat">
             <div class="col-md-12">
               <div id="map"></div>
             </div>

@@ -24,12 +24,12 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
     return parseInt(size.replace(/\s+/g, '').split('m')[0]);
   };
 
-  $scope.addLayer = function(osm_key) {
+  $scope.addLayer = function(setting) {
     var amenities_number = {};
-    if (osm_key == 'price') {
+    if (setting.osm_key == 'price') {
       amenities_number = $scope.prices;
     } else {
-      amenities_number = $scope.amenities_number[osm_key];
+      amenities_number = $scope.amenities_number[setting.osm_key];
     }
 
     var make_color = function(current) {
@@ -40,17 +40,19 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
       if (max === undefined) { max = 0; }
       if (current === undefined) { current = 0; }
       console.log(current , max, min, current * 255 / (max - min));
-      return (current - min) * 255 / (max - min);
+      return parseInt((current - min) * 255 / (max - min));
     };
 
     for (var key in $scope.amenities) {
       var amenity = $scope.amenities[key];
-      layers.addLayer(L.geoJson(amenity.polygon, {
+      var layer = L.geoJson(amenity.polygon, {
         color: "rgb(75, "+ make_color(amenities_number[key]) +", 0)",
         weight: 5,
         fillOpacity: 0.90,
         opacity: 0.90,
-      }));
+      });
+      layer.bindPopup(amenities_number[key] + " " + setting.name +  " in  " + key);
+      layers.addLayer(layer);
     }
   };
 
@@ -85,23 +87,23 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   $scope.checkbox = {};
   $scope.map = undefined;
 
-  $scope.updateSetting = function(osm_key) {
-    if (!$scope.checked[osm_key]) {
+  $scope.updateSetting = function(setting) {
+    if (!$scope.checked[setting.osm_key]) {
       $scope.checked = {};
-      $scope.checked[osm_key] = true;
+      $scope.checked[setting.osm_key] = true;
     } else {
-      $scope.checked[osm_key] = false;
+      $scope.checked[setting.osm_key] = false;
     }
     $scope.best_districts = [];
     layers.clearLayers();
-    if ($scope.checked[osm_key]) {
-      $scope.setBestDistrict(osm_key);
-      $scope.addLayer(osm_key);
+    if ($scope.checked[setting.osm_key]) {
+      $scope.setBestDistrict(setting.osm_key);
+      $scope.addLayer(setting);
     }
   };
 
   (function() {
-    $scope.map = L.map('map').setView([45.7505, 4.8409], 13)
+    $scope.map = L.map('map').setView([45.7505, 4.8409], 12)
 
     L.tileLayer('//{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="//osm.org/copyright">OpenStreetMap</a> contributors',
