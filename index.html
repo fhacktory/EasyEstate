@@ -40,7 +40,11 @@
             <div id="settings">
               <ul id="settings-list" class="nav nav-sidebar">
                 <li ng-repeat="setting in settings">
-                  {{ setting.name }}
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox" ng-model="checkbox[setting.osm_key]" ng-change="updateSetting(osm_key)"> {{ setting.name }}
+                    </label>
+                  </div>
                 </li>
               </ul>
             </div>
