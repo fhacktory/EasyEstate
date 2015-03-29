@@ -1,87 +1,87 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EasyEastate</title>
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EasyEastate</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css">
 
-  <link rel="stylesheet" href="assets/style/style.css">
-</head>
-<body ng-controller="IndexCtrl">
-  <nav class="navbar navbar-inverse">
+    <link rel="stylesheet" href="assets/style/style.css">
+  </head>
+  <body ng-controller="IndexCtrl">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">EasyEstate</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
     <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">EasyEstate</a>
-      </div>
-      <div id="navbar" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">About</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      <div class="row">
+        <div class="col-md-2">
+          <div class="row">
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2">
-        <div class="row">
-
-          <div class="col-md-6 col-md-offset-3">
-            <div id="settings">
-              <div ng-repeat="setting in settings">
-                <p ng-click="updateSetting(setting.osm_key)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
+            <div class="col-md-6 col-md-offset-3">
+              <div id="settings">
+                <div ng-repeat="setting in settings">
+                  <p ng-click="updateSetting(setting.osm_key)" ng-class="checked[setting.osm_key] ? 'btn-default' : ''" class="btn"> {{ setting.name }}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <hr class="col-md-12">
-          <div class="col-md-6 col-md-offset-3">
-            <div id="best_districts">
-              <div ng-repeat="best_district in best_districts">
-                <p> {{ best_district }}</p>
+            <hr class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
+              <div id="best_districts">
+                <div ng-repeat="best_district in best_districts">
+                  <p> {{ best_district }}</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-10">
-        <div class="row">
-          <div class="col-md-12">
-            <div id="map"></div>
+        <div class="col-md-10">
+          <div class="row">
+            <div class="col-md-12">
+              <div id="map"></div>
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div id="app" class="table-responsive col-md-12">
-            <table id="adverts-table" class="table table-striped">
-            <tr ng-repeat="advert in limited_adverts">
-              <td><a ng-href="{{ advert.link }}"><img class='img-responsive' ng-src="{{ advert.pictures[0] }}"/></a></td>
-              <td>{{ advert.title }}</td>
-              <td>{{ advert.size }}</td>
-              <td>{{ advert.price }}</td>
-              <td>{{ advert.city }}</td>
-              <td>{{ advert.zipcode }}</td>
-            </tr>
+          <div class="row">
+            <div id="app" class="table-responsive col-md-12">
+              <table id="adverts-table" class="table table-striped">
+                <tr ng-repeat="advert in adverts" ng-hide="best_districts && advert.zipcode != best_districts[0]">
+                  <td><a ng-href="{{ advert.link }}"><img class='img-responsive' ng-src="{{ advert.pictures[0] }}"/></a></td>
+                  <td>{{ advert.title }}</td>
+                  <td>{{ advert.size }}</td>
+                  <td>{{ advert.price }}</td>
+                  <td>{{ advert.city }}</td>
+                  <td>{{ advert.zipcode }}</td>
+                </tr>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-route.min.js"></script>
-  <script type="text/javascript" src="//cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
-  <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-route.min.js"></script>
+    <script type="text/javascript" src="//cdn.firebase.com/js/client/2.2.3/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.0.0/angularfire.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 
-  <script type="text/javascript" src="src/javascript/app.js"></script>
-  <script type="text/javascript" src="src/javascript/controller/index.js"></script>
-</body>
+    <script type="text/javascript" src="src/javascript/app.js"></script>
+    <script type="text/javascript" src="src/javascript/controller/index.js"></script>
+  </body>
 </html>
