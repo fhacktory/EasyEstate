@@ -4,6 +4,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   var amenities = new Firebase("//fiery-fire-2189.firebaseio.com/amenities");
   var layers = L.layerGroup();
 
+  $scope.loading = true;
   $scope.checked = {};
   $scope.best_districts = [];
   $scope.prices = {};
@@ -11,6 +12,7 @@ app.controller("IndexCtrl", function($scope, $firebaseObject, $firebaseArray, $t
   adverts.on("value", function(snapshot) {
     $timeout(function() {
       $scope.adverts = snapshot.val();
+      $scope.loading = false;
     });
   });
 

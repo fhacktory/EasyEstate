@@ -29,7 +29,10 @@
       </div>
     </nav>
 
-    <div class="container-fluid not-so-fluid ">
+    <div ng-show="loading">
+      <img src="assets/img/loader.gif" style="margin-top: 10%; margin-left: 50%;"/>
+    </div>
+    <div class="container-fluid not-so-fluid" ng-hide="loading">
       <div class="row flat">
         <div class="col-md-2">
           <div class="row">
